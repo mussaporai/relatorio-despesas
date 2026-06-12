@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Despesas — Dream Experience</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1e2a38;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .wrap {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #253447;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+
+    .header {
+      background: #1a2a3a;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .header-logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e2e8f0;
+      letter-spacing: 0.02em;
+    }
+
+    .body { padding: 1.5rem; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .section { margin-bottom: 1.5rem; }
+
+    .field { margin-bottom: 14px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    label span { color: #f87171; }
+
+    input[type=text],
+    input[type=number],
+    input[type=date],
+    select,
+    textarea {
+      width: 100%;
+      height: 40px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #e2e8f0;
+      background: #1e2a38;
+      font-family: inherit;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #3ecf8e;
+      box-shadow: 0 0 0 3px rgba(62,207,142,0.1);
+    }
+
+    input::placeholder { color: #4a5e72; }
+
+    textarea {
+      height: 76px;
+      padding: 10px 12px;
+      resize: none;
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+
+    select option { background: #1e2a38; color: #e2e8f0; }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .cats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .cat {
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      color: #94a3b8;
+      background: #1e2a38;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .cat:hover { border-color: #3ecf8e; color: #3ecf8e; }
+
+    .cat.active {
+      background: rgba(62,207,142,0.12);
+      color: #3ecf8e;
+      border-color: #3ecf8e;
+      font-weight: 500;
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .upload-area:hover {
+      border-color: #3ecf8e;
+      background: rgba(62,207,142,0.05);
+    }
+
+    .upload-area.has-file {
+      border-color: #3ecf8e;
+      background: rgba(62,207,142,0.08);
+    }
+
+    .upload-icon {
+      font-size: 28px;
+      color: #4a5e72;
+      margin-bottom: 6px;
+    }
+
+    .upload-text { font-size: 13px; color: #94a3b8; }
+    .upload-hint { font-size: 11px; color: #4a5e72; margin-top: 3px; }
+
+    .upload-file-name {
+      font-size: 12px;
+      color: #3ecf8e;
+      margin-top: 8px;
+      font-weight: 500;
+      display: none;
+    }
+
+    #file-input { display: none; }
+
+    .btn {
+      width: 100%;
+      height: 44px;
+      background: #3ecf8e;
+      color: #0a1628;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: #2db87a; }
+    .btn:disabled { background: #2d3d50; color: #4a5e72; cursor: not-allowed; }
+
+    .progress-wrap {
+      display: none;
+      margin-top: 1rem;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .progress-bar-bg {
+      background: #1e2a38;
+      border-radius: 20px;
+      height: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #3ecf8e;
+      border-radius: 20px;
+      transition: width 0.4s ease;
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .success-icon { font-size: 48px; color: #3ecf8e; }
+    .success-title { font-size: 18px; font-weight: 600; color: #e2e8f0; }
+    .success-sub { font-size: 14px; color: #94a3b8; }
+
+    .success-btn {
+      margin-top: 12px;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #94a3b8;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .success-btn:hover { border-color: #3ecf8e; color: #3ecf8e; }
+
+    .error-msg {
+      background: rgba(248,113,113,0.1);
+      border: 1px solid rgba(248,113,113,0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #f87171;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 1rem 0.5rem; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<iframe name="hidden-iframe" id="hidden-iframe" style="display:none;"></iframe>
+<div class="wrap">
+  <div class="card">
+    <div class="header">
+      <div class="header-logo">Relatório de Despesas</div>
+    </div>
+
+    <div class="body" id="form-body">
+      <div class="error-msg" id="error-msg"></div>
+
+      <form id="expense-form" novalidate>
+
+        <div class="section">
+          <div class="section-label">IDENTIFICAÇÃO</div>
+
+          <div class="field">
+            <label>Nome completo <span>*</span></label>
+            <input type="text" id="f-nome" placeholder="Ex: Maria Silva">
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Cargo <span>*</span></label>
+              <input type="text" id="f-cargo" placeholder="Ex: Analista">
+            </div>
+            <div class="field">
+              <label>Empresa <span>*</span></label>
+              <select id="f-empresa">
+                <option value="">Selecione</option>
+                <option value="Dream Experience">Dream Experience</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">DESPESA</div>
+
+          <div class="field">
+            <label>Evento <span>*</span></label>
+            <select id="f-evento">
+              <option value="">Selecione</option>
+              <option value="Torcida Amarela NOMAD | VISA">Torcida Amarela NOMAD | VISA</option>
+            </select>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Data da despesa <span>*</span></label>
+              <input type="date" id="f-data">
+            </div>
+            <div class="field">
+              <label>Valor (R$) <span>*</span></label>
+              <input type="number" id="f-valor" placeholder="0.00" step="0.01" min="0">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Categoria <span>*</span></label>
+            <div class="cats">
+              <div class="cat" data-val="Transporte" onclick="selectCat(this)">Transporte</div>
+              <div class="cat" data-val="Alimentação" onclick="selectCat(this)">Alimentação</div>
+              <div class="cat" data-val="Hospedagem" onclick="selectCat(this)">Hospedagem</div>
+              <div class="cat" data-val="Material" onclick="selectCat(this)">Material</div>
+              <div class="cat" data-val="Outros" onclick="selectCat(this)">Outros</div>
+            </div>
+            <input type="hidden" id="f-categoria">
+          </div>
+
+          <div class="field">
+            <label>Pago para <span style="font-weight:400; color:#4a5e72; font-size:11px;">— preencha apenas se pagou por outras pessoas</span></label>
+            <input type="text" id="f-pessoas" placeholder="Ex: João Silva, Maria Souza, Carlos Lima">
+          </div>
+
+          <div class="field">
+            <label>Descrição / observação</label>
+            <textarea id="f-descricao" placeholder="Ex: Táxi para reunião com cliente"></textarea>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">ANEXO</div>
+
+          <div class="field">
+            <label>Foto da nota fiscal <span>*</span></label>
+            <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+              <div class="upload-icon"><i class="ti ti-upload"></i></div>
+              <div class="upload-text">Clique para selecionar o arquivo</div>
+              <div class="upload-hint">JPG, PNG ou PDF — máx. 10MB</div>
+              <div class="upload-file-name" id="file-name"></div>
+            </div>
+            <input type="file" id="file-input" accept="image/*,.pdf" onchange="onFileSelect(this)">
+          </div>
+        </div>
+
+        <button type="submit" class="btn" id="submit-btn">Enviar nota fiscal</button>
+
+        <div class="progress-wrap" id="progress-wrap">
+          <div class="progress-label" id="progress-label">Fazendo upload da foto...</div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="success" id="success-view">
+      <i class="ti ti-circle-check success-icon"></i>
+      <div class="success-title">Nota fiscal enviada!</div>
+      <div class="success-sub">Seus dados foram registrados com sucesso.</div>
+      <button class="success-btn" onclick="resetForm()">Enviar outra nota</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var selectedCat = '';
+  var selectedFile = null;
+
+  function selectCat(el) {
+    document.querySelectorAll('.cat').forEach(function(c) { c.classList.remove('active'); });
+    el.classList.add('active');
+    selectedCat = el.getAttribute('data-val');
+    document.getElementById('f-categoria').value = selectedCat;
+  }
+
+  function onFileSelect(input) {
+    if (input.files && input.files[0]) {
+      selectedFile = input.files[0];
+      var nameEl = document.getElementById('file-name');
+      nameEl.textContent = '📎 ' + selectedFile.name;
+      nameEl.style.display = 'block';
+      document.getElementById('upload-area').classList.add('has-file');
+    }
+  }
+
+  function showError(msg) {
+    var el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function hideError() {
+    document.getElementById('error-msg').style.display = 'none';
+  }
+
+  document.getElementById('expense-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    hideError();
+
+    var nome = document.getElementById('f-nome').value.trim();
+    var cargo = document.getElementById('f-cargo').value.trim();
+    var empresa = document.getElementById('f-empresa').value;
+    var evento = document.getElementById('f-evento').value;
+    var data = document.getElementById('f-data').value;
+    var valor = document.getElementById('f-valor').value;
+    var descricao = document.getElementById('f-descricao').value.trim();
+
+    if (!nome) return showError('Preencha o nome completo.');
+    if (!cargo) return showError('Preencha o cargo.');
+    if (!empresa) return showError('Selecione a empresa.');
+    if (!evento) return showError('Selecione o evento.');
+    if (!data) return showError('Preencha a data da despesa.');
+    if (!valor || parseFloat(valor) <= 0) return showError('Preencha o valor corretamente.');
+    if (!selectedCat) return showError('Selecione uma categoria.');
+    if (!selectedFile) return showError('Anexe a foto da nota fiscal.');
+
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+
+    var progressWrap = document.getElementById('progress-wrap');
+    var progressBar = document.getElementById('progress-bar');
+    var progressLabel = document.getElementById('progress-label');
+
+    progressWrap.style.display = 'block';
+    progressBar.style.width = '10%';
+    progressLabel.textContent = 'Fazendo upload da foto...';
+
+    uploadToImgBB(selectedFile, function(imageUrl) {
+      progressBar.style.width = '60%';
+      progressLabel.textContent = 'Registrando despesa...';
+
+      var formId = '1FAIpQLScLFe-VwnWum6i2rW6YlZhGcnzEC8aOL4mQqwVoL7hQyUn7RA';
+      var url = 'https://docs.google.com/forms/d/e/' + formId + '/formResponse';
+
+      var data_form = new FormData();
+      data_form.append('entry.1681820009', nome);
+      data_form.append('entry.1343018562', cargo);
+      data_form.append('entry.244898588', empresa);
+      data_form.append('entry.328606670', evento);
+      data_form.append('entry.1499922286', data);
+      data_form.append('entry.1466720603', valor);
+      data_form.append('entry.2030070406', selectedCat);
+      var pessoas = document.getElementById('f-pessoas').value.trim();
+      var descFinal = descricao;
+      if (pessoas) descFinal = 'Pago para: ' + pessoas + (descricao ? '\n' + descricao : '');
+      if (imageUrl) descFinal += '\nFoto: ' + imageUrl;
+      data_form.append('entry.566790064', descFinal);
+
+      var iframe = document.getElementById('hidden-iframe');
+      var tempForm = document.createElement('form');
+      tempForm.method = 'POST';
+      tempForm.action = url;
+      tempForm.target = 'hidden-iframe';
+      tempForm.style.display = 'none';
+
+      var fields = {
+        'entry.1681820009': nome,
+        'entry.1343018562': cargo,
+        'entry.244898588': empresa,
+        'entry.328606670': evento,
+        'entry.1499922286': data,
+        'entry.1466720603': valor,
+        'entry.2030070406': selectedCat,
+        'entry.566790064': descFinal
+      };
+
+      Object.keys(fields).forEach(function(key) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = fields[key];
+        tempForm.appendChild(input);
+      });
+
+      document.body.appendChild(tempForm);
+      tempForm.submit();
+      document.body.removeChild(tempForm);
+
+      progressBar.style.width = '100%';
+      progressLabel.textContent = 'Concluído!';
+      setTimeout(function() { showSuccess(); }, 800);
+    });
+  });
+
+  function uploadToImgBB(file, callback) {
+    var apiKey = 'abb87c40a2c4cb5d7f6d53c771dc8cf3';
+    var formData = new FormData();
+    formData.append('image', file);
+
+    fetch('https://api.imgbb.com/1/upload?key=' + apiKey, {
+      method: 'POST',
+      body: formData
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data && data.data && data.data.url) {
+        callback(data.data.url);
+      } else {
+        callback(null);
+      }
+    })
+    .catch(function() { callback(null); });
+  }
+
+  function showSuccess() {
+    document.getElementById('form-body').style.display = 'none';
+    var s = document.getElementById('success-view');
+    s.style.display = 'flex';
+  }
+
+  function resetForm() {
+    document.getElementById('expense-form').reset();
+    document.querySelectorAll('.cat').forEach(function(c) { c.classList.remove('active'); });
+    selectedCat = '';
+    selectedFile = null;
+    document.getElementById('file-name').style.display = 'none';
+    document.getElementById('upload-area').classList.remove('has-file');
+    document.getElementById('submit-btn').disabled = false;
+    document.getElementById('submit-btn').textContent = 'Enviar nota fiscal';
+    document.getElementById('progress-wrap').style.display = 'none';
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('form-body').style.display = 'block';
+    document.getElementById('success-view').style.display = 'none';
+    hideError();
+  }
+</script>
+
+</body>
+</html>
